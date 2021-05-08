@@ -21,9 +21,15 @@ target 'Coins' do
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
   # you should disable the next line.
-  use_flipper!()
-
+  use_flipper!({ 'Flipper' => '0.79.0' })
   post_install do |installer|
-    react_native_post_install(installer)
+    flipper_post_install(installer)
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+         if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 9.0
+           config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '9.0'
+         end
+      end
+    end
   end
 end
