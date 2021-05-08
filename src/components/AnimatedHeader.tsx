@@ -7,7 +7,7 @@ interface Props {
 
 export default React.memo<Props>(({ title }) => (
   <View style={styles.container}>
-    <Text>{title}</Text>
+    <Text style={styles.title}>{title}</Text>
   </View>
 ))
 
@@ -18,7 +18,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 10,
-    height: 100,
-    backgroundColor: 'red',
+    padding: 16,
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: '900',
+    color: '#fff',
   },
 })
