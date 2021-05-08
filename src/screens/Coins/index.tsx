@@ -4,7 +4,6 @@ import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native'
 import { Header, ListHeaderComponent, ListItem } from 'components'
 import Snackbar from 'react-native-snackbar'
 import { useActionSheet } from '@expo/react-native-action-sheet'
-import { useDidMountEffect } from 'utils'
 import { HEADER_HEIGHT } from 'components/Header'
 import { useCoins, fetchTickers } from './CoinsContext'
 
@@ -19,13 +18,14 @@ const Coins: React.FC = () => {
     dispatch,
   } = useCoins()
 
-  useDidMountEffect(() => {
+  useEffect(() => {
     if (!tickers?.length) {
       const init = async () => {
         await fetchTickers(dispatch, lastIndex, defaultChunkSize)
       }
       void init()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {

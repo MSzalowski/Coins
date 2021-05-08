@@ -10,7 +10,7 @@ type Action =
 type Dispatch = (action: Action) => void
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type State = { loading: boolean; error: any; tickers?: FormattedTicker[] }
+type State = { loading: boolean; error: any; tickers: FormattedTicker[] }
 type CoinsProviderProps = { children: React.ReactNode }
 
 const CoinsContext = React.createContext<
@@ -27,10 +27,7 @@ const coinsReducer = (state: State, action: Action) => {
       return {
         ...state,
         loading: false,
-        tickers: [
-          ...(state.tickers ? state.tickers : []),
-          ...action.payload.tickers,
-        ],
+        tickers: [...state.tickers, ...action.payload.tickers],
       }
     }
     case 'FETCH_TICKERS_FAILURE': {
@@ -46,6 +43,7 @@ const CoinsProvider = ({ children }: CoinsProviderProps) => {
   const [state, dispatch] = React.useReducer(coinsReducer, {
     loading: false,
     error: null,
+    tickers: [],
   })
   const value = { state, dispatch }
   return <CoinsContext.Provider value={value}>{children}</CoinsContext.Provider>
@@ -67,6 +65,11 @@ const fetchTickers = async (
   dispatch({ type: 'FETCH_TICKERS' })
   try {
     const tickers = await client.fetchTickers(chunkSize, lastIndex)
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    if ((tickers as any).error) {
+      throw new Error((tickers as any).error)
+    }
+    /* eslint-enable @typescript-eslint/no-explicit-any */
     dispatch({ type: 'FETCH_TICKERS_SUCCESS', payload: { tickers } })
   } catch (error) {
     dispatch({ type: 'FETCH_TICKERS_FAILURE', payload: { error } })
