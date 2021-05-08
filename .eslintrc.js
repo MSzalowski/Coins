@@ -38,6 +38,7 @@ module.exports = {
     'no-undef': 0,
     'no-console': 1,
     'no-control-regex': 0,
+    'no-void': 0,
     'global-require': 0,
 
     'import/prefer-default-export': 0,

@@ -11,6 +11,7 @@
     "postinstall": "npx pod-install"
   },
   "dependencies": {
+    "@coinpaprika/api-nodejs-client": "^1.2.0",
     "prettier": "^2.2.1",
     "react": "17.0.1",
     "react-native": "0.64.0",
