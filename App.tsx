@@ -1,5 +1,5 @@
 import React from 'react'
-import { Coins } from './src/screens'
+import { Coins } from 'screens'
 
 const App = () => <Coins />
 
