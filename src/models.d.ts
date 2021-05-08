@@ -37,6 +37,8 @@ export type FormattedTicker = {
   name: string
   rank: number
   symbol: string
+  price: number
   lastUpdated: string
   percent: number
+  chartUrl: string
 }

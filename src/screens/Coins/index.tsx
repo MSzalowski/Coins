@@ -22,6 +22,8 @@ const Coins: React.FC = () => {
     void init()
   }, [])
 
+  console.log(data)
+
   return (
     <View style={[styles.container, { marginTop: insets.top }]}>
       <Header

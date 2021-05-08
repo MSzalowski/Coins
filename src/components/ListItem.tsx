@@ -1,31 +1,69 @@
 import React from 'react'
 import { FormattedTicker } from 'models'
 import { View, StyleSheet, Text } from 'react-native'
+import { SvgUri } from 'react-native-svg'
 
-export default React.memo<FormattedTicker>(({ name, symbol, rank }) => (
-  <View style={styles.container}>
-    <View style={styles.column}>
-      <View style={styles.row}>
-        <View style={styles.logoPlaceholder} />
-        <Text style={styles.symbol}>{symbol}</Text>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.rankContainer}>
-          <Text style={styles.rank}>{rank}</Text>
+const priceFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+})
+
+export default React.memo<FormattedTicker>(
+  ({ name, symbol, rank, chartUrl, price, percent }) => (
+    <View style={styles.container}>
+      <View style={styles.section}>
+        <View style={styles.column}>
+          <View style={styles.row}>
+            <View style={styles.logoPlaceholder} />
+            <Text style={styles.symbol}>{symbol}</Text>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.rankContainer}>
+              <Text style={styles.rank}>{rank}</Text>
+            </View>
+            <Text style={styles.name} ellipsizeMode="tail">
+              {name}
+            </Text>
+          </View>
         </View>
-        <Text style={styles.name}>{name}</Text>
+      </View>
+      {chartUrl && (
+        <View style={styles.section}>
+          <SvgUri uri={chartUrl} />
+        </View>
+      )}
+      <View style={styles.section}>
+        <View style={styles.column}>
+          <Text style={styles.price}>{priceFormatter.format(price)}</Text>
+          <View
+            style={[
+              styles.percentBadge,
+              // eslint-disable-next-line react-native/no-inline-styles
+              { backgroundColor: percent > 0 ? 'green' : 'red' },
+            ]}>
+            <Text style={styles.percent}>
+              {percent > 0 ? `+${percent}%` : `${percent}%`}
+            </Text>
+          </View>
+        </View>
       </View>
     </View>
-  </View>
-))
+  ),
+)
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    marginTop: 4,
+    alignItems: 'center',
     padding: 16,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: 'gray',
+  },
+  section: {
+    flex: 1,
+  },
+  priceContainer: {
+    alignItems: 'flex-end',
   },
   column: {
     flexDirection: 'column',
@@ -62,5 +100,21 @@ const styles = StyleSheet.create({
     color: 'gray',
     fontSize: 16,
     marginLeft: 8,
+  },
+  price: {
+    fontWeight: '500',
+    fontSize: 16,
+    color: '#FFF',
+    textAlign: 'right',
+  },
+  percent: {
+    fontWeight: '500',
+    fontSize: 16,
+  },
+  percentBadge: {
+    marginTop: 8,
+    borderRadius: 4,
+    alignSelf: 'flex-end',
+    padding: 4,
   },
 })

@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
     zIndex: 10,
     padding: 16,
     height: HEADER_HEIGHT,
-    borderBottomColor: 'red',
     borderBottomWidth: 2,
   },
   title: {
