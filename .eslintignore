@@ -1,0 +1,5 @@
+metro.config.js
+lint-staged.config.js
+babel.config.js
+.eslintrc.js
+index.js
