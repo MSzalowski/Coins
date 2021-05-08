@@ -1,16 +1,19 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { StyleSheet, View } from 'react-native'
-import { Header } from 'components'
+import { Header, ListItem } from 'components'
+import { FormattedTicker } from 'models'
+import { HEADER_HEIGHT } from 'components/Header'
 import { fetchTickers } from '../../client'
 
 const Coins: React.FC = () => {
   const insets = useSafeAreaInsets()
+  const [data, setData] = useState<FormattedTicker[]>()
 
   useEffect(() => {
     const init = async () => {
       try {
-        console.log(await fetchTickers())
+        setData(await fetchTickers())
       } catch (e) {
         console.log(e)
       }
@@ -28,6 +31,11 @@ const Coins: React.FC = () => {
           { label: 'market cap', onPress: console.log },
         ]}
       />
+      <View style={{ top: HEADER_HEIGHT }}>
+        {data?.map((item) => (
+          <ListItem {...item} />
+        ))}
+      </View>
     </View>
   )
 }

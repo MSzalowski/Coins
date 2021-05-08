@@ -2,6 +2,8 @@ import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import Button, { ButtonProps } from './Button'
 
+export const HEADER_HEIGHT = 125
+
 interface Props {
   title: string
   actions?: ButtonProps[]
@@ -28,6 +30,7 @@ const styles = StyleSheet.create({
     right: 0,
     zIndex: 10,
     padding: 16,
+    height: HEADER_HEIGHT,
     borderBottomColor: 'red',
     borderBottomWidth: 2,
   },
