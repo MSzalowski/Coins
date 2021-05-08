@@ -1,25 +1,37 @@
 import { FormattedTicker } from 'models'
 import React from 'react'
+import * as client from '../../client'
 
 type Action =
-  | { type: 'FETCH_TICKERS'; payload: { lastIndex: number; chunkSize: number } }
+  | { type: 'FETCH_TICKERS' }
   | { type: 'FETCH_TICKERS_SUCCESS'; payload: { tickers: FormattedTicker[] } }
-  | { type: 'FETCH_TICKERS_FAILURE'; payload: never }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  | { type: 'FETCH_TICKERS_FAILURE'; payload: any }
 type Dispatch = (action: Action) => void
-type State = { loading: boolean; error: unknown; tickers?: FormattedTicker[] }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type State = { loading: boolean; error: any; tickers?: FormattedTicker[] }
 type CoinsProviderProps = { children: React.ReactNode }
 
 const CoinsContext = React.createContext<
   { state: State; dispatch: Dispatch } | undefined
 >(undefined)
 
+// TODO: Instead of spreading state on each action it would be better to use immer
 const coinsReducer = (state: State, action: Action) => {
   switch (action.type) {
     case 'FETCH_TICKERS': {
       return { ...state, loading: true }
     }
     case 'FETCH_TICKERS_SUCCESS': {
-      return { ...state, loading: false, tickers: action.payload.tickers }
+      return {
+        ...state,
+        loading: false,
+        tickers: [
+          ...(state.tickers ? state.tickers : []),
+          ...action.payload.tickers,
+        ],
+      }
     }
     case 'FETCH_TICKERS_FAILURE': {
       return { ...state, loading: false, error: action.payload }
@@ -38,11 +50,27 @@ const CoinsProvider = ({ children }: CoinsProviderProps) => {
   const value = { state, dispatch }
   return <CoinsContext.Provider value={value}>{children}</CoinsContext.Provider>
 }
-function useCoins() {
+
+const useCoins = () => {
   const context = React.useContext(CoinsContext)
   if (context === undefined) {
-    throw new Error('useCount must be used within a CountProvider')
+    throw new Error('useCoins must be used within a CoinsProvider')
   }
   return context
 }
-export { CoinsProvider, useCoins }
+
+const fetchTickers = async (
+  dispatch: Dispatch,
+  lastIndex = 0,
+  chunkSize = 100,
+) => {
+  dispatch({ type: 'FETCH_TICKERS' })
+  try {
+    const tickers = await client.fetchTickers(chunkSize, lastIndex)
+    dispatch({ type: 'FETCH_TICKERS_SUCCESS', payload: { tickers } })
+  } catch (error) {
+    dispatch({ type: 'FETCH_TICKERS_FAILURE', payload: { error } })
+  }
+}
+
+export { CoinsProvider, useCoins, fetchTickers }
