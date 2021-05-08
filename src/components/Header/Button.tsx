@@ -10,7 +10,7 @@ export interface ButtonProps {
 export default React.memo<ButtonProps>(({ label, onPress }) => (
   <TouchableWithoutFeedback onPress={onPress}>
     <View style={styles.container}>
-      <Text style={styles.label}>{label.toUpperCase()}</Text>
+      <Text style={styles.label}>{label}</Text>
     </View>
   </TouchableWithoutFeedback>
 ))

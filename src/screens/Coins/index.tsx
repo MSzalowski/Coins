@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { StyleSheet, View } from 'react-native'
-import { Header, ListItem } from 'components'
+import { FlatList, StyleSheet, View } from 'react-native'
+import { Header, ListHeaderComponent, ListItem } from 'components'
 import { FormattedTicker } from 'models'
 import { HEADER_HEIGHT } from 'components/Header'
 import { fetchTickers } from '../../client'
@@ -22,22 +22,21 @@ const Coins: React.FC = () => {
     void init()
   }, [])
 
-  console.log(data)
-
   return (
     <View style={[styles.container, { marginTop: insets.top }]}>
       <Header
         title="Coins"
-        actions={[
-          { label: 'all coins', onPress: console.log },
-          { label: 'market cap', onPress: console.log },
-        ]}
+        actions={[{ label: 'ALL COINS', onPress: console.log }]}
       />
-      <View style={{ top: HEADER_HEIGHT }}>
-        {data?.map((item) => (
-          <ListItem key={item.id} {...item} />
-        ))}
-      </View>
+      <ListHeaderComponent />
+      <FlatList
+        data={data}
+        style={{ top: HEADER_HEIGHT + 20 }}
+        renderItem={({ item }) => <ListItem {...item} />}
+        keyExtractor={(item) => item.id}
+        onEndReached={console.log}
+        onScroll={console.log}
+      />
     </View>
   )
 }
