@@ -33,7 +33,7 @@ const Coins: React.FC = () => {
       />
       <View style={{ top: HEADER_HEIGHT }}>
         {data?.map((item) => (
-          <ListItem {...item} />
+          <ListItem key={item.id} {...item} />
         ))}
       </View>
     </View>
