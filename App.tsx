@@ -1,11 +1,14 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { CoinsProvider } from 'screens/Coins/CoinsContext'
 import { Coins } from './src/screens'
 
 const App = () => (
   <SafeAreaProvider style={styles.safeArea}>
-    <Coins />
+    <CoinsProvider>
+      <Coins />
+    </CoinsProvider>
   </SafeAreaProvider>
 )
 
