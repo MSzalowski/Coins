@@ -22,7 +22,7 @@ export const fetchTickers = async (
               lastUpdated: last_updated,
               price: quotes.USD.price,
               percent: quotes.USD.percent_change_24h,
-              chartUrl: `http://graphs.coinpaprika.com/currency/chart/${id}/7d/chart.svg`,
+              chartUrl: `http://graphs.coinpaprika.com/currency/chart/${id}/24h/chart.svg`,
             }))
         : new Error('Cannot fetch tickers'),
     )
