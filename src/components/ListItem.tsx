@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   },
   rankContainer: {
     height: 24,
-    width: 24,
+    paddingHorizontal: 8,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#2c2c2e',
