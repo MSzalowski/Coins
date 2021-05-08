@@ -1,5 +1,5 @@
 import CoinpaprikaAPI from '@coinpaprika/api-nodejs-client'
-import { FormattedTicker, Ticker } from 'models'
+import { FormattedTicker, Ticker } from '../models'
 
 const client = new CoinpaprikaAPI()
 

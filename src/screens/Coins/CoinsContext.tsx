@@ -1,6 +1,6 @@
 import { FormattedTicker } from 'models'
 import React from 'react'
-import * as client from '../../client'
+import * as client from '../../utils/client'
 
 type Action =
   | { type: 'FETCH_TICKERS' }
