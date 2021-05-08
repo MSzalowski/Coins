@@ -9,10 +9,19 @@ import { useCoins, fetchTickers } from './CoinsContext'
 
 const defaultChunkSize = 1000
 
+const headerActionOptions = [
+  'TOP 100',
+  'TOP 200',
+  'TOP 300',
+  'All Coins',
+  'Cancel',
+]
+
 const Coins: React.FC = () => {
   const insets = useSafeAreaInsets()
   const { showActionSheetWithOptions } = useActionSheet()
   const [lastIndex, setLastIndex] = useState(0)
+  const [chunkSize, setChunkSize] = useState(defaultChunkSize)
   const {
     state: { tickers, loading, error },
     dispatch,
@@ -47,10 +56,25 @@ const Coins: React.FC = () => {
     showActionSheetWithOptions(
       {
         userInterfaceStyle: 'dark',
-        options: ['TOP 100', 'TOP 200', 'TOP 300', 'All Coins', 'Cancel'],
+        options: headerActionOptions,
         cancelButtonIndex: 4,
       },
-      () => {},
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
+            setChunkSize(100)
+            break
+          case 1:
+            setChunkSize(200)
+            break
+          case 2:
+            setChunkSize(300)
+            break
+          default:
+            setChunkSize(defaultChunkSize)
+            break
+        }
+      },
     )
   }
 
@@ -58,16 +82,22 @@ const Coins: React.FC = () => {
     <View style={[styles.container, { marginTop: insets.top }]}>
       <Header
         title="Coins"
-        actions={[{ label: 'ALL COINS', onPress: handleHeaderActionPress }]}
+        actions={[
+          {
+            label:
+              headerActionOptions[chunkSize < 1000 ? chunkSize / 100 - 1 : 3],
+            onPress: handleHeaderActionPress,
+          },
+        ]}
       />
       <ListHeaderComponent />
       {!loading && (
         <FlatList
-          data={tickers}
+          data={tickers.slice(0, chunkSize)}
           style={{ top: HEADER_HEIGHT + 20 }}
           renderItem={({ item }) => <ListItem {...item} />}
           keyExtractor={(item) => item.id}
-          onEndReached={handleEndReached}
+          onEndReached={chunkSize < 1000 ? handleEndReached : null}
         />
       )}
       {loading && <ActivityIndicator style={styles.activityIndicator} />}
