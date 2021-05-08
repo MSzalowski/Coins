@@ -3,6 +3,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native'
 import { Header, ListHeaderComponent, ListItem } from 'components'
 import Snackbar from 'react-native-snackbar'
+import { useActionSheet } from '@expo/react-native-action-sheet'
 import { useDidMountEffect } from 'utils'
 import { HEADER_HEIGHT } from 'components/Header'
 import { useCoins, fetchTickers } from './CoinsContext'
@@ -11,6 +12,7 @@ const defaultChunkSize = 1000
 
 const Coins: React.FC = () => {
   const insets = useSafeAreaInsets()
+  const { showActionSheetWithOptions } = useActionSheet()
   const [lastIndex, setLastIndex] = useState(0)
   const {
     state: { tickers, loading, error },
@@ -18,10 +20,12 @@ const Coins: React.FC = () => {
   } = useCoins()
 
   useDidMountEffect(() => {
-    const init = async () => {
-      await fetchTickers(dispatch, lastIndex, defaultChunkSize)
+    if (!tickers?.length) {
+      const init = async () => {
+        await fetchTickers(dispatch, lastIndex, defaultChunkSize)
+      }
+      void init()
     }
-    void init()
   }, [])
 
   useEffect(() => {
@@ -39,11 +43,22 @@ const Coins: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch])
 
+  const handleHeaderActionPress = () => {
+    showActionSheetWithOptions(
+      {
+        userInterfaceStyle: 'dark',
+        options: ['TOP 100', 'TOP 200', 'TOP 300', 'All Coins', 'Cancel'],
+        cancelButtonIndex: 4,
+      },
+      () => {},
+    )
+  }
+
   return (
     <View style={[styles.container, { marginTop: insets.top }]}>
       <Header
         title="Coins"
-        actions={[{ label: 'ALL COINS', onPress: console.log }]}
+        actions={[{ label: 'ALL COINS', onPress: handleHeaderActionPress }]}
       />
       <ListHeaderComponent />
       {!loading && (
