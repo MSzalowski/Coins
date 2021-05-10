@@ -39,7 +39,7 @@ export default React.memo<FormattedTicker>(
               // eslint-disable-next-line react-native/no-inline-styles
               { backgroundColor: percent > 0 ? 'green' : 'red' },
             ]}>
-            <Text style={styles.percent}>
+            <Text style={styles.percent} numberOfLines={1}>
               {percent > 0 ? `+${percent}%` : `${percent}%`}
             </Text>
           </View>
