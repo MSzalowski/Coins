@@ -57,14 +57,10 @@ const useCoins = () => {
   return context
 }
 
-const fetchTickers = async (
-  dispatch: Dispatch,
-  lastIndex = 0,
-  chunkSize = 100,
-) => {
+const fetchTickers = async (dispatch: Dispatch) => {
   dispatch({ type: 'FETCH_TICKERS' })
   try {
-    const tickers = await client.fetchTickers(chunkSize, lastIndex)
+    const tickers = await client.fetchTickers()
     /* eslint-disable @typescript-eslint/no-explicit-any */
     if ((tickers as any).error) {
       throw new Error((tickers as any).error)

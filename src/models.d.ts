@@ -41,4 +41,5 @@ export type FormattedTicker = {
   lastUpdated: string
   percent: number
   chartUrl: string
+  logoUrl: string
 }

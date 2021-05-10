@@ -1,6 +1,6 @@
 import React from 'react'
 import { FormattedTicker } from 'models'
-import { View, StyleSheet, Text } from 'react-native'
+import { View, StyleSheet, Text, Image } from 'react-native'
 import { SvgUri } from 'react-native-svg'
 
 const priceFormatter = new Intl.NumberFormat('en-US', {
@@ -9,21 +9,19 @@ const priceFormatter = new Intl.NumberFormat('en-US', {
 })
 
 export default React.memo<FormattedTicker>(
-  ({ name, symbol, rank, chartUrl, price, percent }) => (
+  ({ name, symbol, rank, chartUrl, price, percent, logoUrl }) => (
     <View style={styles.container}>
       <View style={styles.section}>
         <View style={styles.column}>
           <View style={styles.row}>
-            <View style={styles.logoPlaceholder} />
+            <Image style={styles.logo} source={{ uri: logoUrl }} />
             <Text style={styles.symbol}>{symbol}</Text>
           </View>
           <View style={styles.row}>
             <View style={styles.rankContainer}>
               <Text style={styles.rank}>{rank}</Text>
             </View>
-            <Text style={styles.name} ellipsizeMode="tail">
-              {name}
-            </Text>
+            <Text style={styles.name}>{name}</Text>
           </View>
         </View>
       </View>
@@ -73,11 +71,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingVertical: 4,
   },
-  logoPlaceholder: {
+  logo: {
     height: 24,
-    borderRadius: 12,
     width: 24,
-    backgroundColor: 'red',
+    // backgroundColor: 'red',
+    borderRadius: 12,
   },
   symbol: {
     fontWeight: '600',

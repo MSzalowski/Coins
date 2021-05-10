@@ -20,7 +20,6 @@ const headerActionOptions = [
 const Coins: React.FC = () => {
   const insets = useSafeAreaInsets()
   const { showActionSheetWithOptions } = useActionSheet()
-  const [lastIndex, setLastIndex] = useState(0)
   const [chunkSize, setChunkSize] = useState(defaultChunkSize)
   const {
     state: { tickers, loading, error },
@@ -30,7 +29,7 @@ const Coins: React.FC = () => {
   useEffect(() => {
     if (!tickers?.length) {
       const init = async () => {
-        await fetchTickers(dispatch, lastIndex, defaultChunkSize)
+        await fetchTickers(dispatch)
       }
       void init()
     }
@@ -47,8 +46,7 @@ const Coins: React.FC = () => {
   }, [loading, error])
 
   const handleEndReached = useCallback(async () => {
-    await fetchTickers(dispatch, lastIndex + defaultChunkSize, defaultChunkSize)
-    setLastIndex((prevIndex) => prevIndex + defaultChunkSize)
+    await fetchTickers(dispatch)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch])
 

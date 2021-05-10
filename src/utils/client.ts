@@ -3,16 +3,12 @@ import { FormattedTicker, Ticker } from '../models'
 
 const client = new CoinpaprikaAPI()
 
-export const fetchTickers = async (
-  chunkSize = 100,
-  lastIndex = 0,
-): Promise<FormattedTicker[]> =>
+export const fetchTickers = async (): Promise<FormattedTicker[]> =>
   client
     .getAllTickers()
     .then(async (tickers: Ticker[]) =>
       tickers instanceof Array
         ? tickers
-            .slice(lastIndex, chunkSize)
             .sort((a, b) => b.quotes.USD.price - a.quotes.USD.price)
             .map(({ id, name, rank, symbol, quotes, last_updated }) => ({
               id,
@@ -23,6 +19,7 @@ export const fetchTickers = async (
               price: quotes.USD.price,
               percent: quotes.USD.percent_change_24h,
               chartUrl: `http://graphs.coinpaprika.com/currency/chart/${id}/24h/chart.svg`,
+              logoUrl: `http://static.coinpaprika.com/coin/${id}/logo.png`,
             }))
         : new Error('Cannot fetch tickers'),
     )
